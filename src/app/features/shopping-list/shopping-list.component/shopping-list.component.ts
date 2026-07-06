@@ -1,6 +1,8 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
+import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ShoppingListService } from '../../../core/services/shopping-list.service';
+import { groupRouteParam } from '../group-route-param';
 
 @Component({
   selector: 'app-shopping-list',
@@ -10,6 +12,7 @@ import { ShoppingListService } from '../../../core/services/shopping-list.servic
 })
 export class ShoppingListComponent implements OnInit {
   protected shoppingListService = inject(ShoppingListService);
+  private router = inject(Router);
 
   newItemName = signal('');
 
@@ -24,20 +27,7 @@ export class ShoppingListComponent implements OnInit {
     await this.shoppingListService.addItem(name);
   }
 
-  toggleChecked(id: string, event: Event) {
-    const isChecked = (event.target as HTMLInputElement).checked;
-    this.shoppingListService.toggleChecked(id, isChecked);
-  }
-
-  deleteItem(id: string) {
-    this.shoppingListService.deleteItem(id);
-  }
-
-  deleteGroup(groupName: string | null) {
-    this.shoppingListService.deleteGroup(groupName);
-  }
-
-  clearChecked() {
-    this.shoppingListService.clearChecked();
+  openGroup(groupName: string | null) {
+    this.router.navigate(['/shopping-list', groupRouteParam(groupName)]);
   }
 }

@@ -419,45 +419,6 @@ label {
   accent-color: var(--color-accent);
 }
 
-.shopping-list-groups {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.shopping-list-group {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: 1.25rem 1.5rem;
-  box-shadow: var(--shadow-sm);
-}
-
-.shopping-list-group-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 0.9rem;
-}
-
-.shopping-list-group-header h2 {
-  margin: 0;
-  font-size: 1.1rem;
-}
-
-.shopping-list-group .shopping-list li {
-  background: none;
-  border: none;
-  border-radius: 0;
-  box-shadow: none;
-  padding: 0.5rem 0;
-  border-bottom: 1px solid var(--color-border);
-}
-
-.shopping-list-group .shopping-list li:last-child {
-  border-bottom: none;
-}
-
 @media (max-width: 480px) {
   .page {
     padding: 1.25rem 1rem;

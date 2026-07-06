@@ -7,11 +7,13 @@ export interface ShoppingListItem {
   name: string;
   is_checked: boolean;
   group_name?: string | null;
+  group_image_url?: string | null;
   created_at?: string;
 }
 
 export interface ShoppingListGroup {
   groupName: string | null;
+  groupImageUrl: string | null;
   items: ShoppingListItem[];
 }
 
@@ -45,13 +47,17 @@ export class ShoppingListService {
       if (index === undefined) {
         index = groups.length;
         indexByName.set(key, index);
-        groups.push({ groupName: item.group_name ?? null, items: [] });
+        groups.push({ groupName: item.group_name ?? null, groupImageUrl: item.group_image_url ?? null, items: [] });
       }
       groups[index].items.push(item);
     }
 
     return groups;
   });
+
+  groupByName(groupName: string | null): ShoppingListGroup | undefined {
+    return this.groups().find(g => g.groupName === groupName);
+  }
 
   async addItem(name: string): Promise<void> {
     const userId = (await this.supabase.client.auth.getUser()).data.user?.id;
@@ -63,13 +69,14 @@ export class ShoppingListService {
     if (!error && data) this.items.update(items => [...items, data]);
   }
 
-  async addItems(names: string[], groupName?: string): Promise<void> {
+  async addItems(names: string[], groupName?: string, groupImageUrl?: string): Promise<void> {
     const userId = (await this.supabase.client.auth.getUser()).data.user?.id;
     const rows = names.filter(Boolean).map(name => ({
       name,
       user_id: userId,
       is_checked: false,
       group_name: groupName ?? null,
+      group_image_url: groupImageUrl ?? null,
     }));
     if (rows.length === 0) return;
     const { data, error } = await this.supabase.client
@@ -107,10 +114,12 @@ export class ShoppingListService {
       .in('id', idsToDelete);
   }
 
-  async clearChecked(): Promise<void> {
-    const checkedIds = this.items().filter(i => i.is_checked).map(i => i.id!);
+  async clearCheckedInGroup(groupName: string | null): Promise<void> {
+    const checkedIds = this.items()
+      .filter(i => (i.group_name ?? null) === groupName && i.is_checked)
+      .map(i => i.id!);
     if (checkedIds.length === 0) return;
-    this.items.update(items => items.filter(i => !i.is_checked));
+    this.items.update(items => items.filter(i => !(checkedIds.includes(i.id!))));
     await this.supabase.client
       .from('shopping_list_items')
       .delete()

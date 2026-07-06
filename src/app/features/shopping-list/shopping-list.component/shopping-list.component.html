@@ -1,7 +1,6 @@
 <div class="page">
   <div class="page-header">
     <h1>Shopping List</h1>
-    <button class="link-button" (click)="clearChecked()">Clear checked</button>
   </div>
 
   <form class="add-item-form" (ngSubmit)="addItem()">
@@ -19,31 +18,17 @@
     <p>Loading shopping list...</p>
   } @else if (shoppingListService.error()) {
     <p class="error">{{ shoppingListService.error() }}</p>
-  } @else if (shoppingListService.items().length === 0) {
+  } @else if (shoppingListService.groups().length === 0) {
     <p>Your shopping list is empty.</p>
   } @else {
-    <div class="shopping-list-groups">
+    <div class="recipe-grid">
       @for (group of shoppingListService.groups(); track group.groupName ?? '_ungrouped') {
-        <div class="shopping-list-group">
-          <div class="shopping-list-group-header">
-            <h2>{{ group.groupName ?? 'Other items' }}</h2>
-            <button class="link-button" (click)="deleteGroup(group.groupName)">Remove all</button>
-          </div>
-          <ul class="shopping-list">
-            @for (item of group.items; track item.id) {
-              <li [class.checked]="item.is_checked">
-                <label>
-                  <input
-                    type="checkbox"
-                    [checked]="item.is_checked"
-                    (change)="toggleChecked(item.id!, $event)"
-                  />
-                  {{ item.name }}
-                </label>
-                <button class="link-button" (click)="deleteItem(item.id!)">Remove</button>
-              </li>
-            }
-          </ul>
+        <div class="recipe-card" (click)="openGroup(group.groupName)">
+          @if (group.groupImageUrl) {
+            <img [src]="group.groupImageUrl" [alt]="group.groupName ?? 'Other items'" />
+          }
+          <h2>{{ group.groupName ?? 'Other items' }}</h2>
+          <p>{{ group.items.length }} item{{ group.items.length === 1 ? '' : 's' }}</p>
         </div>
       }
     </div>

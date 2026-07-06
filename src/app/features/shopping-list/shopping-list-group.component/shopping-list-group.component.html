@@ -1,0 +1,40 @@
+<div class="page">
+  @if (shoppingListService.loading()) {
+    <p>Loading shopping list...</p>
+  } @else if (!group()) {
+    <p>This card is empty or no longer exists.</p>
+    <button (click)="goBack()">Back to shopping list</button>
+  } @else {
+    <button class="link-button" (click)="goBack()">&larr; Back</button>
+
+    <div class="recipe-detail">
+      @if (group()!.groupImageUrl) {
+        <img [src]="group()!.groupImageUrl" [alt]="group()!.groupName ?? 'Other items'" />
+      }
+
+      <div class="page-header">
+        <h1>{{ group()!.groupName ?? 'Other items' }}</h1>
+        <div>
+          <button class="link-button" (click)="clearChecked()">Clear checked</button>
+          <button class="danger" (click)="removeAll()">Remove all</button>
+        </div>
+      </div>
+
+      <ul class="shopping-list">
+        @for (item of group()!.items; track item.id) {
+          <li [class.checked]="item.is_checked">
+            <label>
+              <input
+                type="checkbox"
+                [checked]="item.is_checked"
+                (change)="toggleChecked(item.id!, $event)"
+              />
+              {{ item.name }}
+            </label>
+            <button class="link-button" (click)="deleteItem(item.id!)">Remove</button>
+          </li>
+        }
+      </ul>
+    </div>
+  }
+</div>

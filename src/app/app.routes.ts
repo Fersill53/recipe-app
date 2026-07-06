@@ -16,6 +16,11 @@ export const routes: Routes = [
     canActivate: [authGuard],
   },
   {
+    path: 'shopping-list/:group',
+    loadComponent: () => import('./features/shopping-list/shopping-list-group.component/shopping-list-group.component').then(m => m.ShoppingListGroupComponent),
+    canActivate: [authGuard],
+  },
+  {
     path: 'profile',
     loadComponent: () => import('./features/profile/profile.component/profile.component').then(m => m.ProfileComponent),
     canActivate: [authGuard],

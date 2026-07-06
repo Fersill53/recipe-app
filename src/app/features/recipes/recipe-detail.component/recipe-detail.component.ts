@@ -46,7 +46,11 @@ export class RecipeDetailComponent implements OnInit {
   }
 
   async addToShoppingList() {
-    await this.shoppingListService.addItems(this.recipe()!.ingredients, this.recipe()!.title);
+    await this.shoppingListService.addItems(
+      this.recipe()!.ingredients,
+      this.recipe()!.title,
+      this.recipe()!.image_url,
+    );
     this.addedToShoppingList.set(true);
   }
 }
