@@ -83,6 +83,6 @@ export class RecipeFormComponent implements OnInit {
 
   cancel() {
     if (this.isEditing) this.router.navigate(['/recipes', this.recipeId()]);
-    else this.router.navigate(['/']);
+    else this.router.navigate(['/recipes']);
   }
 }

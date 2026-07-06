@@ -2,6 +2,7 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Recipe, RecipeService } from '../../../core/services/recipe.service';
 import { AuthService } from '../../../core/services/auth.service';
+import { ShoppingListService } from '../../../core/services/shopping-list.service';
 
 @Component({
   selector: 'app-recipe-detail',
@@ -12,11 +13,13 @@ import { AuthService } from '../../../core/services/auth.service';
 export class RecipeDetailComponent implements OnInit {
   private recipeService = inject(RecipeService);
   protected authService = inject(AuthService);
+  private shoppingListService = inject(ShoppingListService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
 
   recipe = signal<Recipe | null>(null);
   loading = signal(true);
+  addedToShoppingList = signal(false);
 
   get isOwner() {
     return this.authService.user()?.id === this.recipe()?.user_id;
@@ -39,6 +42,11 @@ export class RecipeDetailComponent implements OnInit {
   }
 
   goBack() {
-    this.router.navigate(['/']);
+    this.router.navigate(['/recipes']);
+  }
+
+  async addToShoppingList() {
+    await this.shoppingListService.addItems(this.recipe()!.ingredients);
+    this.addedToShoppingList.set(true);
   }
 }

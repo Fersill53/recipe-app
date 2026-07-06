@@ -4,11 +4,20 @@ import { authGuard } from './core/guards/auth.guard';
 export const routes: Routes = [
   {
     path: '',
-    loadComponent: () => import('./features/recipes/recipe-list.component/recipe-list.component').then(m => m.RecipeListComponent),
+    loadComponent: () => import('./features/home/home.component/home.component').then(m => m.HomeComponent),
   },
   {
     path: 'login',
     loadComponent: () => import('./features/auth/login.component/login.component').then(m => m.LoginComponent),
+  },
+  {
+    path: 'shopping-list',
+    loadComponent: () => import('./features/shopping-list/shopping-list.component/shopping-list.component').then(m => m.ShoppingListComponent),
+    canActivate: [authGuard],
+  },
+  {
+    path: 'recipes',
+    loadComponent: () => import('./features/recipes/recipe-list.component/recipe-list.component').then(m => m.RecipeListComponent),
   },
   {
     path: 'recipes/new',

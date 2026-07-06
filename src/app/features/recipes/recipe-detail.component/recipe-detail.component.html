@@ -14,12 +14,17 @@
 
       <div class="page-header">
         <h1>{{ recipe()!.title }}</h1>
-        @if (isOwner) {
-          <div>
+        <div>
+          @if (authService.isLoggedIn) {
+            <button (click)="addToShoppingList()">
+              {{ addedToShoppingList() ? 'Added!' : 'Add to shopping list' }}
+            </button>
+          }
+          @if (isOwner) {
             <button (click)="goToEdit()">Edit</button>
             <button class="danger" (click)="deleteRecipe()">Delete</button>
-          </div>
-        }
+          }
+        </div>
       </div>
 
       <p>{{ recipe()!.description }}</p>

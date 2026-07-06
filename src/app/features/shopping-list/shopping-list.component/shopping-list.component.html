@@ -1,0 +1,41 @@
+<div class="page">
+  <div class="page-header">
+    <h1>Shopping List</h1>
+    <button class="link-button" (click)="clearChecked()">Clear checked</button>
+  </div>
+
+  <form class="add-item-form" (ngSubmit)="addItem()">
+    <input
+      type="text"
+      placeholder="Add an item..."
+      [ngModel]="newItemName()"
+      (ngModelChange)="newItemName.set($event)"
+      name="newItemName"
+    />
+    <button type="submit">Add</button>
+  </form>
+
+  @if (shoppingListService.loading()) {
+    <p>Loading shopping list...</p>
+  } @else if (shoppingListService.error()) {
+    <p class="error">{{ shoppingListService.error() }}</p>
+  } @else if (shoppingListService.items().length === 0) {
+    <p>Your shopping list is empty.</p>
+  } @else {
+    <ul class="shopping-list">
+      @for (item of shoppingListService.items(); track item.id) {
+        <li [class.checked]="item.is_checked">
+          <label>
+            <input
+              type="checkbox"
+              [checked]="item.is_checked"
+              (change)="toggleChecked(item.id!, $event)"
+            />
+            {{ item.name }}
+          </label>
+          <button class="link-button" (click)="deleteItem(item.id!)">Remove</button>
+        </li>
+      }
+    </ul>
+  }
+</div>
