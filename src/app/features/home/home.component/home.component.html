@@ -3,7 +3,8 @@
 
   <div class="menu-grid">
     @for (card of cards; track card.route) {
-      <a class="menu-card" [routerLink]="card.route">
+      <a class="menu-card" [routerLink]="card.route" [style.--card-accent]="card.accent">
+        <span class="menu-card-icon">{{ card.icon }}</span>
         <h2>{{ card.title }}</h2>
         <p>{{ card.description }}</p>
       </a>

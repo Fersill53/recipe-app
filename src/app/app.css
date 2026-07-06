@@ -2,24 +2,59 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem 1.5rem;
-  border-bottom: 1px solid #e5e5e5;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  padding: 0.85rem 1.25rem;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .brand {
+  font-family: var(--font-heading);
   font-weight: 700;
-  font-size: 1.25rem;
+  font-size: clamp(1.1rem, 4vw, 1.4rem);
   text-decoration: none;
-  color: inherit;
+  color: var(--color-primary);
+  white-space: nowrap;
 }
 
 .app-header nav {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.75rem;
+}
+
+.app-header nav a {
+  color: var(--color-text);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 0.35rem 0.6rem;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.app-header nav a:hover {
+  background: var(--color-primary-light);
+  color: var(--color-primary-hover);
 }
 
 .user-email {
-  color: #666;
-  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+@media (max-width: 480px) {
+  .app-header {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .app-header nav {
+    justify-content: center;
+    width: 100%;
+  }
 }
