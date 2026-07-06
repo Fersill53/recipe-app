@@ -1,0 +1,54 @@
+<div class="page">
+  <h1>{{ isEditing ? 'Edit recipe' : 'New recipe' }}</h1>
+
+  <form class="recipe-form" (ngSubmit)="save()">
+    <label>
+      Title
+      <input type="text" name="title" [ngModel]="title()" (ngModelChange)="title.set($event)" required />
+    </label>
+
+    <label>
+      Description
+      <textarea name="description" rows="2" [ngModel]="description()" (ngModelChange)="description.set($event)"></textarea>
+    </label>
+
+    <label>
+      Image URL
+      <input type="text" name="imageUrl" [ngModel]="imageUrl()" (ngModelChange)="imageUrl.set($event)" />
+    </label>
+
+    <div class="form-row">
+      <label>
+        Servings
+        <input type="number" name="servings" [ngModel]="servings()" (ngModelChange)="servings.set($event)" min="1" />
+      </label>
+      <label>
+        Prep time (min)
+        <input type="number" name="prepTime" [ngModel]="prepTime()" (ngModelChange)="prepTime.set($event)" min="0" />
+      </label>
+      <label>
+        Cook time (min)
+        <input type="number" name="cookTime" [ngModel]="cookTime()" (ngModelChange)="cookTime.set($event)" min="0" />
+      </label>
+    </div>
+
+    <label>
+      Ingredients (one per line)
+      <textarea name="ingredients" rows="6" [ngModel]="ingredientsText()" (ngModelChange)="ingredientsText.set($event)" required></textarea>
+    </label>
+
+    <label>
+      Instructions
+      <textarea name="instructions" rows="8" [ngModel]="instructions()" (ngModelChange)="instructions.set($event)" required></textarea>
+    </label>
+
+    @if (error()) {
+      <p class="error">{{ error() }}</p>
+    }
+
+    <div class="form-actions">
+      <button type="button" class="link-button" (click)="cancel()">Cancel</button>
+      <button type="submit" [disabled]="saving()">{{ saving() ? 'Saving...' : 'Save recipe' }}</button>
+    </div>
+  </form>
+</div>

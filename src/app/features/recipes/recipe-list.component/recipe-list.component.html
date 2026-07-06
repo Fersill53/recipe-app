@@ -1,0 +1,36 @@
+<div class="page">
+  <div class="page-header">
+    <h1>Recipes</h1>
+    @if (authService.isLoggedIn) {
+      <button (click)="goToNew()">+ New recipe</button>
+    }
+  </div>
+
+  <input
+    class="search-input"
+    type="search"
+    placeholder="Search recipes..."
+    [ngModel]="searchQuery()"
+    (ngModelChange)="searchQuery.set($event)"
+  />
+
+  @if (recipeService.loading()) {
+    <p>Loading recipes...</p>
+  } @else if (recipeService.error()) {
+    <p class="error">{{ recipeService.error() }}</p>
+  } @else if (filteredRecipes().length === 0) {
+    <p>No recipes found.</p>
+  } @else {
+    <div class="recipe-grid">
+      @for (recipe of filteredRecipes(); track recipe.id) {
+        <div class="recipe-card" (click)="goToRecipe(recipe.id!)">
+          @if (recipe.image_url) {
+            <img [src]="recipe.image_url" [alt]="recipe.title" />
+          }
+          <h2>{{ recipe.title }}</h2>
+          <p>{{ recipe.description }}</p>
+        </div>
+      }
+    </div>
+  }
+</div>

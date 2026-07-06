@@ -1,0 +1,44 @@
+<div class="page">
+  @if (loading()) {
+    <p>Loading recipe...</p>
+  } @else if (!recipe()) {
+    <p>Recipe not found.</p>
+    <button (click)="goBack()">Back</button>
+  } @else {
+    <button class="link-button" (click)="goBack()">&larr; Back</button>
+
+    <div class="recipe-detail">
+      @if (recipe()!.image_url) {
+        <img [src]="recipe()!.image_url" [alt]="recipe()!.title" />
+      }
+
+      <div class="page-header">
+        <h1>{{ recipe()!.title }}</h1>
+        @if (isOwner) {
+          <div>
+            <button (click)="goToEdit()">Edit</button>
+            <button class="danger" (click)="deleteRecipe()">Delete</button>
+          </div>
+        }
+      </div>
+
+      <p>{{ recipe()!.description }}</p>
+
+      <div class="meta">
+        @if (recipe()!.servings) { <span>Servings: {{ recipe()!.servings }}</span> }
+        @if (recipe()!.prep_time_minutes) { <span>Prep: {{ recipe()!.prep_time_minutes }} min</span> }
+        @if (recipe()!.cook_time_minutes) { <span>Cook: {{ recipe()!.cook_time_minutes }} min</span> }
+      </div>
+
+      <h2>Ingredients</h2>
+      <ul>
+        @for (ingredient of recipe()!.ingredients; track ingredient) {
+          <li>{{ ingredient }}</li>
+        }
+      </ul>
+
+      <h2>Instructions</h2>
+      <p class="instructions">{{ recipe()!.instructions }}</p>
+    </div>
+  }
+</div>

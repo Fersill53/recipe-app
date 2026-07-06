@@ -1,0 +1,25 @@
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.brand {
+  font-weight: 700;
+  font-size: 1.25rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+.app-header nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.user-email {
+  color: #666;
+  font-size: 0.9rem;
+}

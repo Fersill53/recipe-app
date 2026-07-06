@@ -1,0 +1,30 @@
+<div class="auth-page">
+  <form class="auth-form" (ngSubmit)="submit()">
+    <h1>{{ mode() === 'signin' ? 'Sign in' : 'Create account' }}</h1>
+
+    <label>
+      Email
+      <input type="email" name="email" [ngModel]="email()" (ngModelChange)="email.set($event)" required />
+    </label>
+
+    <label>
+      Password
+      <input type="password" name="password" [ngModel]="password()" (ngModelChange)="password.set($event)" required minlength="6" />
+    </label>
+
+    @if (error()) {
+      <p class="error">{{ error() }}</p>
+    }
+    @if (message()) {
+      <p class="message">{{ message() }}</p>
+    }
+
+    <button type="submit" [disabled]="loading()">
+      {{ loading() ? 'Please wait...' : (mode() === 'signin' ? 'Sign in' : 'Sign up') }}
+    </button>
+
+    <button type="button" class="link-button" (click)="toggleMode()">
+      {{ mode() === 'signin' ? "Need an account? Sign up" : 'Already have an account? Sign in' }}
+    </button>
+  </form>
+</div>
