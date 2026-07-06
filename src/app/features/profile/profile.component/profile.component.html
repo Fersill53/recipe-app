@@ -1,0 +1,62 @@
+<div class="page profile-page">
+  <h1>Profile</h1>
+
+  <section class="profile-section">
+    <h2>Your name</h2>
+    <label>
+      Full name
+      <input type="text" [ngModel]="fullName()" (ngModelChange)="fullName.set($event)" placeholder="e.g. Alex Rivera" />
+    </label>
+    @if (nameError()) {
+      <p class="error">{{ nameError() }}</p>
+    }
+    @if (nameMessage()) {
+      <p class="message">{{ nameMessage() }}</p>
+    }
+    <button (click)="saveName()" [disabled]="savingName() || !fullName().trim()">
+      {{ savingName() ? 'Saving...' : 'Save name' }}
+    </button>
+  </section>
+
+  <section class="profile-section">
+    <h2>Email</h2>
+    <label>
+      Email address
+      <input type="email" [ngModel]="newEmail()" (ngModelChange)="newEmail.set($event)" />
+    </label>
+    @if (emailError()) {
+      <p class="error">{{ emailError() }}</p>
+    }
+    @if (emailMessage()) {
+      <p class="message">{{ emailMessage() }}</p>
+    }
+    <button (click)="saveEmail()" [disabled]="savingEmail() || !newEmail().trim() || newEmail() === email">
+      {{ savingEmail() ? 'Saving...' : 'Update email' }}
+    </button>
+  </section>
+
+  <section class="profile-section">
+    <h2>Change password</h2>
+    <label>
+      Current password
+      <input type="password" [ngModel]="currentPassword()" (ngModelChange)="currentPassword.set($event)" />
+    </label>
+    <label>
+      New password
+      <input type="password" [ngModel]="newPassword()" (ngModelChange)="newPassword.set($event)" placeholder="At least 6 characters" />
+    </label>
+    <label>
+      Confirm new password
+      <input type="password" [ngModel]="confirmPassword()" (ngModelChange)="confirmPassword.set($event)" />
+    </label>
+    @if (passwordError()) {
+      <p class="error">{{ passwordError() }}</p>
+    }
+    @if (passwordMessage()) {
+      <p class="message">{{ passwordMessage() }}</p>
+    }
+    <button (click)="savePassword()" [disabled]="savingPassword() || !currentPassword() || !newPassword() || !confirmPassword()">
+      {{ savingPassword() ? 'Saving...' : 'Update password' }}
+    </button>
+  </section>
+</div>

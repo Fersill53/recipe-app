@@ -41,10 +41,9 @@
   color: var(--color-primary-hover);
 }
 
-.user-email {
+.app-header nav a.user-name {
   color: var(--color-text-muted);
-  font-size: 0.8rem;
-  white-space: nowrap;
+  font-size: 0.85rem;
 }
 
 @media (max-width: 480px) {

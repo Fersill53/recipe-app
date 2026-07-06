@@ -8,7 +8,7 @@
     @if (authService.loading()) {
       <!-- checking session -->
     } @else if (authService.isLoggedIn) {
-      <span class="user-email">{{ authService.user().email }}</span>
+      <a routerLink="/profile" class="user-name">{{ authService.displayName() || authService.user().email }}</a>
       <button (click)="authService.signOut()">Sign out</button>
     } @else {
       <a routerLink="/login">Sign in</a>
