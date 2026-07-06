@@ -18,7 +18,6 @@ export class AuthService {
     this.supabase.client.auth.onAuthStateChange((event, session) => {
       this.user.set(session?.user ?? null);
       if (event === 'SIGNED_OUT') this.router.navigate(['/login']);
-      else if (event === 'SIGNED_IN') this.router.navigate(['/']);
     });
   }
 

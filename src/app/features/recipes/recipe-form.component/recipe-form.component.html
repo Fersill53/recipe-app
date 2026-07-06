@@ -1,6 +1,29 @@
 <div class="page">
   <h1>{{ isEditing ? 'Edit recipe' : 'New recipe' }}</h1>
 
+  @if (!isEditing) {
+    <div class="import-box">
+      <label>
+        Import from a recipe URL
+        <div class="import-row">
+          <input
+            type="url"
+            placeholder="https://example.com/some-recipe"
+            [ngModel]="importUrl()"
+            (ngModelChange)="importUrl.set($event)"
+            name="importUrl"
+          />
+          <button type="button" (click)="importFromUrl()" [disabled]="importing() || !importUrl().trim()">
+            {{ importing() ? 'Fetching...' : 'Fetch' }}
+          </button>
+        </div>
+      </label>
+      @if (importError()) {
+        <p class="error">{{ importError() }}</p>
+      }
+    </div>
+  }
+
   <form class="recipe-form" (ngSubmit)="save()">
     <label>
       Title

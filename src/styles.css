@@ -229,6 +229,27 @@ label {
   padding: 0 1.5rem;
 }
 
+.import-box {
+  background: var(--color-primary-light);
+  border: 1px solid #fbd7b8;
+  border-radius: var(--radius-lg);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.import-box label {
+  color: var(--color-text);
+}
+
+.import-row {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.import-row input {
+  flex: 1;
+}
+
 .auth-form, .recipe-form {
   display: flex;
   flex-direction: column;

@@ -73,4 +73,21 @@ export class RecipeService {
       .delete()
       .eq('id', id);
   }
+
+  async importFromUrl(url: string): Promise<{ recipe: Partial<Recipe> | null; error: string | null }> {
+    const { data, error } = await this.supabase.client.functions.invoke('parse-recipe', {
+      body: { url },
+    });
+    if (error) {
+      const message = await this.extractFunctionError(error);
+      return { recipe: null, error: message };
+    }
+    if (data?.error) return { recipe: null, error: data.error };
+    return { recipe: data, error: null };
+  }
+
+  private async extractFunctionError(error: any): Promise<string> {
+    const body = await error?.context?.json?.().catch(() => null);
+    return body?.error ?? error?.message ?? 'Failed to import recipe from that URL.';
+  }
 }

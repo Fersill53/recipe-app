@@ -1,4 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
+import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../core/services/auth.service';
 
@@ -10,6 +11,7 @@ import { AuthService } from '../../../core/services/auth.service';
 })
 export class LoginComponent {
   private authService = inject(AuthService);
+  private router = inject(Router);
 
   email = signal('');
   password = signal('');
@@ -33,6 +35,7 @@ export class LoginComponent {
     if (this.mode() === 'signin') {
       const { error } = await this.authService.signIn(this.email(), this.password());
       if (error) this.error.set(error.message);
+      else this.router.navigate(['/']);
     } else {
       const { error } = await this.authService.signUp(this.email(), this.password());
       if (error) this.error.set(error.message);

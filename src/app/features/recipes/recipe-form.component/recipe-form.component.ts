@@ -28,6 +28,10 @@ export class RecipeFormComponent implements OnInit {
   saving = signal(false);
   error = signal<string | null>(null);
 
+  importUrl = signal('');
+  importing = signal(false);
+  importError = signal<string | null>(null);
+
   get isEditing() {
     return !!this.recipeId();
   }
@@ -84,5 +88,31 @@ export class RecipeFormComponent implements OnInit {
   cancel() {
     if (this.isEditing) this.router.navigate(['/recipes', this.recipeId()]);
     else this.router.navigate(['/recipes']);
+  }
+
+  async importFromUrl() {
+    const url = this.importUrl().trim();
+    if (!url) return;
+
+    this.importing.set(true);
+    this.importError.set(null);
+
+    const { recipe, error } = await this.recipeService.importFromUrl(url);
+
+    this.importing.set(false);
+
+    if (error || !recipe) {
+      this.importError.set(error ?? 'Failed to import recipe from that URL.');
+      return;
+    }
+
+    this.title.set(recipe.title ?? this.title());
+    this.description.set(recipe.description ?? this.description());
+    if (recipe.ingredients?.length) this.ingredientsText.set(recipe.ingredients.join('\n'));
+    if (recipe.instructions) this.instructions.set(recipe.instructions);
+    this.imageUrl.set(recipe.image_url ?? this.imageUrl());
+    if (recipe.servings != null) this.servings.set(recipe.servings);
+    if (recipe.prep_time_minutes != null) this.prepTime.set(recipe.prep_time_minutes);
+    if (recipe.cook_time_minutes != null) this.cookTime.set(recipe.cook_time_minutes);
   }
 }
