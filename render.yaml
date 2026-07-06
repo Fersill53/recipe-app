@@ -1,0 +1,10 @@
+services:
+  - name: recipe-app
+    type: web
+    runtime: static
+    buildCommand: npm ci && npm run build
+    staticPublishPath: dist/recipe-app/browser
+    routes:
+      - source: "/*"
+        destination: "/index.html"
+        type: rewrite
