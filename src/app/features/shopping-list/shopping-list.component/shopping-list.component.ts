@@ -33,6 +33,10 @@ export class ShoppingListComponent implements OnInit {
     this.shoppingListService.deleteItem(id);
   }
 
+  deleteGroup(groupName: string | null) {
+    this.shoppingListService.deleteGroup(groupName);
+  }
+
   clearChecked() {
     this.shoppingListService.clearChecked();
   }

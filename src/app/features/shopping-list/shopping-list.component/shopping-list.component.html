@@ -22,20 +22,30 @@
   } @else if (shoppingListService.items().length === 0) {
     <p>Your shopping list is empty.</p>
   } @else {
-    <ul class="shopping-list">
-      @for (item of shoppingListService.items(); track item.id) {
-        <li [class.checked]="item.is_checked">
-          <label>
-            <input
-              type="checkbox"
-              [checked]="item.is_checked"
-              (change)="toggleChecked(item.id!, $event)"
-            />
-            {{ item.name }}
-          </label>
-          <button class="link-button" (click)="deleteItem(item.id!)">Remove</button>
-        </li>
+    <div class="shopping-list-groups">
+      @for (group of shoppingListService.groups(); track group.groupName ?? '_ungrouped') {
+        <div class="shopping-list-group">
+          <div class="shopping-list-group-header">
+            <h2>{{ group.groupName ?? 'Other items' }}</h2>
+            <button class="link-button" (click)="deleteGroup(group.groupName)">Remove all</button>
+          </div>
+          <ul class="shopping-list">
+            @for (item of group.items; track item.id) {
+              <li [class.checked]="item.is_checked">
+                <label>
+                  <input
+                    type="checkbox"
+                    [checked]="item.is_checked"
+                    (change)="toggleChecked(item.id!, $event)"
+                  />
+                  {{ item.name }}
+                </label>
+                <button class="link-button" (click)="deleteItem(item.id!)">Remove</button>
+              </li>
+            }
+          </ul>
+        </div>
       }
-    </ul>
+    </div>
   }
 </div>

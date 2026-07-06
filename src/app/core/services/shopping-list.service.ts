@@ -1,4 +1,4 @@
-import { Injectable, inject, signal } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
 import { SupabaseService } from './supabase.service';
 
 export interface ShoppingListItem {
@@ -6,7 +6,13 @@ export interface ShoppingListItem {
   user_id?: string;
   name: string;
   is_checked: boolean;
+  group_name?: string | null;
   created_at?: string;
+}
+
+export interface ShoppingListGroup {
+  groupName: string | null;
+  items: ShoppingListItem[];
 }
 
 @Injectable({ providedIn: 'root' })
@@ -29,6 +35,24 @@ export class ShoppingListService {
     else this.items.set(data ?? []);
   }
 
+  groups = computed<ShoppingListGroup[]>(() => {
+    const groups: ShoppingListGroup[] = [];
+    const indexByName = new Map<string, number>();
+
+    for (const item of this.items()) {
+      const key = item.group_name ?? '';
+      let index = indexByName.get(key);
+      if (index === undefined) {
+        index = groups.length;
+        indexByName.set(key, index);
+        groups.push({ groupName: item.group_name ?? null, items: [] });
+      }
+      groups[index].items.push(item);
+    }
+
+    return groups;
+  });
+
   async addItem(name: string): Promise<void> {
     const userId = (await this.supabase.client.auth.getUser()).data.user?.id;
     const { data, error } = await this.supabase.client
@@ -39,9 +63,14 @@ export class ShoppingListService {
     if (!error && data) this.items.update(items => [...items, data]);
   }
 
-  async addItems(names: string[]): Promise<void> {
+  async addItems(names: string[], groupName?: string): Promise<void> {
     const userId = (await this.supabase.client.auth.getUser()).data.user?.id;
-    const rows = names.filter(Boolean).map(name => ({ name, user_id: userId, is_checked: false }));
+    const rows = names.filter(Boolean).map(name => ({
+      name,
+      user_id: userId,
+      is_checked: false,
+      group_name: groupName ?? null,
+    }));
     if (rows.length === 0) return;
     const { data, error } = await this.supabase.client
       .from('shopping_list_items')
@@ -64,6 +93,18 @@ export class ShoppingListService {
       .from('shopping_list_items')
       .delete()
       .eq('id', id);
+  }
+
+  async deleteGroup(groupName: string | null): Promise<void> {
+    const idsToDelete = this.items()
+      .filter(i => (i.group_name ?? null) === groupName)
+      .map(i => i.id!);
+    if (idsToDelete.length === 0) return;
+    this.items.update(items => items.filter(i => (i.group_name ?? null) !== groupName));
+    await this.supabase.client
+      .from('shopping_list_items')
+      .delete()
+      .in('id', idsToDelete);
   }
 
   async clearChecked(): Promise<void> {
