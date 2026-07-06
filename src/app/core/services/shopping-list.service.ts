@@ -59,6 +59,15 @@ export class ShoppingListService {
     return this.groups().find(g => g.groupName === groupName);
   }
 
+  async groupExists(groupName: string): Promise<boolean> {
+    const { data, error } = await this.supabase.client
+      .from('shopping_list_items')
+      .select('id')
+      .eq('group_name', groupName)
+      .limit(1);
+    return !error && (data?.length ?? 0) > 0;
+  }
+
   async addItem(name: string): Promise<void> {
     const userId = (await this.supabase.client.auth.getUser()).data.user?.id;
     const { data, error } = await this.supabase.client

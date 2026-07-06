@@ -16,8 +16,12 @@
         <h1>{{ recipe()!.title }}</h1>
         <div>
           @if (authService.isLoggedIn) {
-            <button (click)="addToShoppingList()">
-              {{ addedToShoppingList() ? 'Added!' : 'Add to shopping list' }}
+            <button
+              class="added-check"
+              [class.added]="addedToShoppingList()"
+              [disabled]="addedToShoppingList()"
+              (click)="addToShoppingList()">
+              {{ addedToShoppingList() ? '✓ Already added to shopping list' : 'Add to shopping list' }}
             </button>
           }
           @if (isOwner) {

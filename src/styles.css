@@ -73,6 +73,12 @@ button.danger {
   background: var(--color-danger);
 }
 
+button.added-check.added {
+  background: var(--color-accent);
+  opacity: 1;
+  cursor: default;
+}
+
 button.danger:hover:not(:disabled) {
   background: var(--color-danger-hover);
 }

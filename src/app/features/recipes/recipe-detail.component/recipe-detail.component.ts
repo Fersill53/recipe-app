@@ -27,8 +27,13 @@ export class RecipeDetailComponent implements OnInit {
 
   async ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id') ?? '';
-    this.recipe.set(await this.recipeService.getRecipe(id));
+    const recipe = await this.recipeService.getRecipe(id);
+    this.recipe.set(recipe);
     this.loading.set(false);
+
+    if (recipe && this.authService.isLoggedIn) {
+      this.addedToShoppingList.set(await this.shoppingListService.groupExists(recipe.title));
+    }
   }
 
   goToEdit() {
