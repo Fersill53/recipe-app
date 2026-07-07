@@ -148,7 +148,12 @@ label {
 
 .page-header > div {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.5rem;
+}
+
+.page-header > div button {
+  white-space: nowrap;
 }
 
 .search-input {
