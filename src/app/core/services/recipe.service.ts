@@ -12,6 +12,7 @@ export interface Recipe {
   servings?: number;
   prep_time_minutes?: number;
   cook_time_minutes?: number;
+  tags?: string[];
   created_at?: string;
   updated_at?: string;
 }

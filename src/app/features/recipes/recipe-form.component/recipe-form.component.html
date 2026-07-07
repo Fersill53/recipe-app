@@ -40,6 +40,11 @@
       <input type="text" name="imageUrl" [ngModel]="imageUrl()" (ngModelChange)="imageUrl.set($event)" />
     </label>
 
+    <label>
+      Tags (comma separated)
+      <input type="text" name="tags" placeholder="e.g. breakfast, vegan, dessert" [ngModel]="tagsText()" (ngModelChange)="tagsText.set($event)" />
+    </label>
+
     <div class="form-row">
       <label>
         Servings

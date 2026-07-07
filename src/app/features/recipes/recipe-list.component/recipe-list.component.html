@@ -14,6 +14,25 @@
     (ngModelChange)="searchQuery.set($event)"
   />
 
+  <div class="filter-row">
+    @if (authService.isLoggedIn) {
+      <button
+        class="filter-chip"
+        [class.active]="favoritesOnly()"
+        (click)="toggleFavoritesOnly()">
+        ★ Favorites
+      </button>
+    }
+    @for (tag of allTags(); track tag) {
+      <button
+        class="filter-chip"
+        [class.active]="selectedTag() === tag"
+        (click)="toggleTag(tag)">
+        {{ tag }}
+      </button>
+    }
+  </div>
+
   @if (recipeService.loading()) {
     <p>Loading recipes...</p>
   } @else if (recipeService.error()) {
@@ -24,11 +43,26 @@
     <div class="recipe-grid">
       @for (recipe of filteredRecipes(); track recipe.id) {
         <div class="recipe-card" (click)="goToRecipe(recipe.id!)">
+          @if (authService.isLoggedIn) {
+            <button
+              class="favorite-star"
+              [class.active]="favoriteService.isFavorite(recipe.id!)"
+              (click)="toggleFavorite($event, recipe.id!)">
+              {{ favoriteService.isFavorite(recipe.id!) ? '★' : '☆' }}
+            </button>
+          }
           @if (recipe.image_url) {
             <img [src]="recipe.image_url" [alt]="recipe.title" />
           }
           <h2>{{ recipe.title }}</h2>
           <p>{{ recipe.description }}</p>
+          @if (recipe.tags?.length) {
+            <div class="tag-list">
+              @for (tag of recipe.tags; track tag) {
+                <span class="tag-pill">{{ tag }}</span>
+              }
+            </div>
+          }
         </div>
       }
     </div>

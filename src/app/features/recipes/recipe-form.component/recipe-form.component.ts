@@ -25,6 +25,7 @@ export class RecipeFormComponent implements OnInit {
   servings = signal<number | null>(null);
   prepTime = signal<number | null>(null);
   cookTime = signal<number | null>(null);
+  tagsText = signal('');
   saving = signal(false);
   error = signal<string | null>(null);
 
@@ -52,6 +53,7 @@ export class RecipeFormComponent implements OnInit {
     this.servings.set(recipe.servings ?? null);
     this.prepTime.set(recipe.prep_time_minutes ?? null);
     this.cookTime.set(recipe.cook_time_minutes ?? null);
+    this.tagsText.set((recipe.tags ?? []).join(', '));
   }
 
   async save() {
@@ -69,6 +71,7 @@ export class RecipeFormComponent implements OnInit {
       servings: this.servings() ?? undefined,
       prep_time_minutes: this.prepTime() ?? undefined,
       cook_time_minutes: this.cookTime() ?? undefined,
+      tags: this.tagsText().split(',').map(t => t.trim().toLowerCase()).filter(Boolean),
     };
 
     const result = this.isEditing

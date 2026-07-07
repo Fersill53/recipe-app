@@ -13,7 +13,17 @@
       }
 
       <div class="page-header">
-        <h1>{{ recipe()!.title }}</h1>
+        <h1>
+          @if (authService.isLoggedIn) {
+            <button
+              class="favorite-star inline"
+              [class.active]="favoriteService.isFavorite(recipe()!.id!)"
+              (click)="toggleFavorite()">
+              {{ favoriteService.isFavorite(recipe()!.id!) ? '★' : '☆' }}
+            </button>
+          }
+          {{ recipe()!.title }}
+        </h1>
         <div>
           @if (authService.isLoggedIn) {
             <button
@@ -33,6 +43,14 @@
 
       <p>{{ recipe()!.description }}</p>
 
+      @if (recipe()!.tags?.length) {
+        <div class="tag-list">
+          @for (tag of recipe()!.tags; track tag) {
+            <span class="tag-pill">{{ tag }}</span>
+          }
+        </div>
+      }
+
       <div class="meta">
         @if (recipe()!.servings) { <span>Servings: {{ recipe()!.servings }}</span> }
         @if (recipe()!.prep_time_minutes) { <span>Prep: {{ recipe()!.prep_time_minutes }} min</span> }
@@ -48,6 +66,39 @@
 
       <h2>Instructions</h2>
       <p class="instructions">{{ recipe()!.instructions }}</p>
+
+      @if (authService.isLoggedIn) {
+        <div class="profile-section notes-section">
+          <h2>Your notes</h2>
+
+          <div class="rating-stars">
+            @for (star of [1, 2, 3, 4, 5]; track star) {
+              <button
+                type="button"
+                class="rating-star"
+                [class.active]="(rating() ?? 0) >= star"
+                (click)="setRating(star)">
+                {{ (rating() ?? 0) >= star ? '★' : '☆' }}
+              </button>
+            }
+          </div>
+
+          <textarea
+            rows="3"
+            placeholder="e.g. added more garlic, halve the salt next time..."
+            [ngModel]="note()"
+            (ngModelChange)="note.set($event)"
+          ></textarea>
+
+          @if (noteSaved()) {
+            <p class="message">Saved.</p>
+          }
+
+          <button (click)="saveNote()" [disabled]="savingNote()">
+            {{ savingNote() ? 'Saving...' : 'Save notes' }}
+          </button>
+        </div>
+      }
     </div>
   }
 </div>
